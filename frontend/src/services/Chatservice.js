@@ -9,7 +9,10 @@ export async function saveMessage(userId, role, message) {
     },
   ]);
 
-  if (error) throw error;
+  if (error) {
+  console.error("Supabase Save Error:", error);
+  return;
+}
 }
 
 export async function loadMessages(userId) {

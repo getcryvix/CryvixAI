@@ -1,45 +1,69 @@
-// Express app setup — implementation coming next
-import express from 'express'
-import cors from 'cors'
-import helmet from 'helmet'
-import morgan from 'morgan'
-import { askGroq } from './services/groq.js'
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 
-const app = express()
+import { askGroq } from "./services/groq.js";
+import { generateImage } from "./services/openrouter.js";
 
-app.use(helmet())
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }))
-app.use(morgan('dev'))
-app.use(express.json({ limit: "1mb" }))
+const app = express();
 
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'cryvixai-api' })
-})
-app.post('/api/chat', async (req, res) => {
+app.use(helmet());
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "CryvixAI API",
+  });
+});
+
+app.post("/api/chat", async (req, res) => {
   try {
-    const { message } = req.body
+    const { message, messages = [] } = req.body;
 
     if (!message) {
       return res.status(400).json({
-        error: 'Message is required'
-      })
+        error: "Message is required",
+      });
     }
 
-    const reply = await askGroq(message)
+    const reply = await askGroq(message, messages);
 
     res.json({
-      reply
-    })
-
+      reply,
+    });
   } catch (error) {
-    console.error(error)
-    console.log("Gemini Error:");
-console.dir(error, { depth: null });
+    console.error("CHAT ERROR:", error);
 
     res.status(500).json({
-      error: 'Something went wrong'
-    })
+      error: error.message || "Something went wrong",
+    });
   }
-})
+});
 
-export default app
+app.post("/api/image", async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({
+        error: "Prompt is required",
+      });
+    }
+
+    const result = await generateImage(prompt);
+
+    res.json(result);
+  } catch (error) {
+    console.error("IMAGE ERROR:", error);
+
+    res.status(500).json({
+      error: error.message || "Image generation failed",
+    });
+  }
+});
+
+export default app;

@@ -22,10 +22,10 @@ export default function Sidebar({ onNewChat }) {
       path: "/ai-chat",
     },
     {
-      name: "New Chat",
-      icon: <PlusCircle size={20} />,
-      path: "/ai-chat",
-    },
+  name: "AI Writer",
+  icon: <Settings size={20} />,
+  path: "/ai-writer",
+},
     {
       name: "Settings",
       icon: <Settings size={20} />,

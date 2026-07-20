@@ -21,11 +21,13 @@ export default function DashboardPage({ session }) {
       title: 'AI Image Generator',
       description: 'Turn your imagination into stunning AI-generated images.',
       icon: '🎨',
+      path: '/image',
     },
     {
       title: 'AI Writer',
       description: 'Create articles, captions, scripts and professional content.',
       icon: '✍️',
+      path: '/ai-writer',
     },
     {
       title: 'Image Analyzer',

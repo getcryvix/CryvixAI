@@ -102,11 +102,16 @@ export default function AIChatPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: userMessage,
-        }),
+  message: userMessage,
+  messages: messages.map((msg) => ({
+    role: msg.role,
+    content: msg.text,
+  })),
+}),
       });
 
       const data = await res.json();
+      console.log(data);
       setMessages((prev) => [
         ...prev,
         {
@@ -116,9 +121,11 @@ export default function AIChatPage() {
       ]);
 
       if (user) {
-        await saveMessage(user.id, "assistant", data.reply);
+        console.log("AI Reply:", data.reply);
+        //await saveMessage(user.id, "assistant", data.reply);
       }
     } catch (err) {
+      console.error(err);
       setMessages((prev) => [
         ...prev,
         {

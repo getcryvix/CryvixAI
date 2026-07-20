@@ -6,6 +6,8 @@ import SignupPage from './pages/SignupPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import DashboardPage from './pages/DashboardPage'
 import AIChatPage from './pages/AIChatPage'
+import ImagePage from './pages/ImagePage'
+import AIWriterPage from './pages/AIWriterPage'
 import { supabase } from './lib/supabase'
 
 function ProtectedRoute({ children, session, loading }) {
@@ -120,6 +122,8 @@ export default function App() {
 />
 
 <Route path="/ai-chat" element={<AIChatPage />} />
+<Route path="/image" element={<ImagePage />} />
+<Route path="/ai-writer" element={<AIWriterPage />} />
 
 <Route path="*" element={<Navigate to="/" replace />} />
 
