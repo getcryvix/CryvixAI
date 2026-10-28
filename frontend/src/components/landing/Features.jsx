@@ -55,16 +55,16 @@ const features = [
     gradient: 'from-green-500 to-emerald-600',
   },
   {
-    title: 'Social Media Post Generator',
-    description:
-      'Create engaging posts for LinkedIn, Instagram, and X with hashtags, hooks, and CTAs that drive engagement.',
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-      </svg>
-    ),
-    gradient: 'from-orange-500 to-amber-600',
-  },
+  title: 'YouTube Toolkit',
+  description:
+    'Generate viral titles, descriptions, hashtags, keywords and thumbnail prompts with AI in seconds.',
+  icon: (
+    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h8a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2z" />
+    </svg>
+  ),
+  gradient: 'from-red-500 to-orange-600',
+},
 ]
 
 export default function Features() {
@@ -80,8 +80,9 @@ export default function Features() {
             <span className="gradient-text">move faster</span>
           </h2>
           <p className="mt-4 text-lg text-white/60">
-            Six specialized AI tools designed to handle the repetitive work
-            so you can focus on growing your business.
+            Powerful AI tools for chat, writing, image generation, image analysis,
+invoices, proposals, WhatsApp replies and YouTube content—
+everything you need to grow your business faster.
           </p>
         </div>
 

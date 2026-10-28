@@ -33,3 +33,25 @@
     @apply inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-white/90 transition-all duration-300 hover:bg-white/[0.08] hover:text-white;
   }
 }
+.cryvixai-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+  width: 100%;
+}
+
+.cryvixai-visual-card {
+  width: 100%;
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+
+.cryvixai-visual-card:hover {
+  transform: scale(1.03);
+}

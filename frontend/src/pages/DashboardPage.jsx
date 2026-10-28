@@ -1,8 +1,38 @@
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import Sidebar from "../components/Sidebar";
+import { useEffect, useState } from 'react'
 
 export default function DashboardPage({ session }) {
+
+const [plan, setPlan] = useState('Loading...')
+
+  useEffect(() => {
+    const fetchPlan = async () => {
+      const { data, error } = await supabase
+        .from('user_subscriptions')
+        .select('plan, status')
+        .eq('user_id', session?.user?.id)
+        .maybeSingle()
+
+      if (error) {
+        console.error('Plan fetch error:', error)
+        setPlan('Free')
+        return
+      }
+
+      if (data?.status === 'active') {
+        setPlan(data.plan || 'Free')
+      } else {
+        setPlan('Free')
+      }
+    }
+
+    if (session?.user?.id) {
+      fetchPlan()
+    }
+  }, [session?.user?.id])
+
   const navigate = useNavigate()
 
   const handleSignOut = async () => {
@@ -29,15 +59,43 @@ export default function DashboardPage({ session }) {
       icon: '✍️',
       path: '/ai-writer',
     },
+
+    {
+  title: 'Invoice Generator',
+  description: 'Generate professional invoices in seconds.',
+  icon: '🧾',
+  path: '/invoice',
+},
+{
+  title: 'WhatsApp Reply Generator',
+  description: 'Create smart and professional WhatsApp replies instantly.',
+  icon: '📱',
+  path: '/whatsapp',
+},
+{
+  title: "Proposal Generator",
+  description: "Create professional business proposals in seconds.",
+  icon: "📄",
+  path: "/proposal",
+},
     {
       title: 'Image Analyzer',
       description: 'Upload an image and let AI understand and analyze it.',
       icon: '🔍',
+      path: "/image-analyzer",
     },
+
+    {
+  title: "YouTube Toolkit",
+  description: "Generate viral titles, descriptions, hashtags, keywords and thumbnail prompts with AI.",
+  icon: "🎥",
+  path: "/youtube-toolkit",
+},
     {
       title: 'AI Code Assistant',
       description: 'Generate, explain and fix code with artificial intelligence.',
       icon: '💻',
+      path: "/ai-code",
     },
     {
       title: 'More Tools Coming',
@@ -67,6 +125,36 @@ export default function DashboardPage({ session }) {
               <p className="mt-3 max-w-2xl text-white/70">
                 Choose an AI tool and start creating with CryvixAI.
               </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+
+  <div className="glass rounded-2xl p-4">
+    <p className="text-sm text-white/60">AI Tools</p>
+    <h3 className="mt-2 text-3xl font-bold">8+</h3>
+  </div>
+
+  <div className="glass rounded-2xl p-4">
+    <p className="text-sm text-white/60">Status</p>
+    <h3 className="mt-2 text-2xl font-bold text-green-400">
+      Online
+    </h3>
+  </div>
+
+  <div className="glass rounded-2xl p-4">
+    <p className="text-sm text-white/60">Plan</p>
+    <h3 className="mt-2 text-2xl font-bold">
+  {plan}
+</h3>
+  </div>
+
+  <div className="glass rounded-2xl p-4">
+    <p className="text-sm text-white/60">Version</p>
+    <h3 className="mt-2 text-2xl font-bold">
+      v1.0
+    </h3>
+  </div>
+
+</div>
             </div>
 
             <button

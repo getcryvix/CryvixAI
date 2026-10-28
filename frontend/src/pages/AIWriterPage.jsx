@@ -21,7 +21,70 @@ export default function AIWriterPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: `You are a professional AI Writer. Write a ${type}. ${prompt}`,
+          message: `You are CryvixAI Professional Writer.
+
+Create a high-quality ${type} based on the user's request.
+
+IMPORTANT CONTENT TYPE RULES:
+
+If the selected type is "Instagram Caption":
+- Write ONLY the Instagram caption.
+- Do NOT write an email.
+- Do NOT add a title like "Instagram Caption".
+- Do NOT explain the caption.
+- Make it engaging, natural and social-media friendly.
+- Use emojis naturally when appropriate.
+- Include a clear call-to-action when suitable.
+- Add 5-10 relevant hashtags at the end.
+- Keep it concise and ready to copy directly into Instagram.
+
+If the selected type is "Product Description":
+- Write ONLY a professional product description.
+- Clearly explain the product, its main features and benefits.
+- Focus on why the customer should buy or use the product.
+- Use persuasive but natural language.
+- Do NOT write an email.
+- Do NOT write a blog article.
+- Do NOT invent specifications, prices or claims that the user did not provide.
+- Include a short call-to-action at the end when appropriate.
+- Make the final description ready to copy and use on an online store or website.
+
+If the selected type is "Resume":
+- Create professional resume content.
+- Use clear sections such as Professional Summary, Skills, Work Experience and Education.
+- Use bullet points where appropriate.
+- Make the resume ATS-friendly and easy to read.
+- Do NOT invent qualifications, companies, job titles or experience that the user did not provide.
+- If important information is missing, use neutral wording rather than making up facts.
+- Do NOT write an email, blog article or social-media post.
+- Make the result ready to copy into a professional resume.
+
+If the selected type is "Proposal":
+- Write ONLY a professional business proposal.
+- Start with a clear proposal title.
+- Include an introduction and understanding of the client's requirement.
+- Explain the proposed solution or services.
+- Include scope of work and key deliverables when relevant.
+- Explain benefits and expected outcomes.
+- Include timeline or pricing only when the user provides enough information.
+- Do NOT invent prices, guarantees or business facts.
+- End with a professional conclusion and call-to-action.
+- Do NOT write an email, resume, blog article or social-media post.
+- Make the proposal ready to present to a client.
+
+If the selected type is "Blog Article":
+- Write a complete article with title, introduction, headings, useful content and conclusion.
+
+If the selected type is "YouTube Script":
+- Write a proper script with hook, introduction, main content and ending/CTA.
+
+For all other types:
+- Follow the selected content type exactly.
+- Make the content professional, clear and ready to use.
+- Do not change the requested content type.
+
+User Request:
+${prompt}`,
           messages: [],
         }),
       });
@@ -29,8 +92,27 @@ export default function AIWriterPage() {
       const data = await res.json();
 
       if (data.reply) {
-        setResult(data.reply);
-      } else {
+  setResult(data.reply);
+
+  const oldHistory =
+    JSON.parse(localStorage.getItem("cryvixHistory")) || [];
+
+  const newHistory = {
+    type: type,
+    prompt: prompt,
+    result: data.reply,
+    date: new Date().toLocaleString(),
+  };
+
+  localStorage.setItem(
+    "cryvixHistory",
+    JSON.stringify([
+      newHistory,
+      ...oldHistory,
+    ].slice(0, 50))
+  );
+
+} else {
         setResult("Something went wrong.");
       }
     } catch (err) {
@@ -79,6 +161,11 @@ return (
           <option>Product Description</option>
           <option>Resume</option>
           <option>Proposal</option>
+          <option>WhatsApp Reply</option>
+<option>LinkedIn Post</option>
+<option>Facebook Post</option>
+<option>Twitter/X Post</option>
+<option>Professional Letter</option>
         </select>
 
         <textarea

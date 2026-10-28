@@ -5,8 +5,8 @@ const plans = [
     period: 'forever',
     description: 'Perfect for trying out CryvixAI and light personal use.',
     features: [
-      '50 AI generations / month',
-      'Access to all 6 tools',
+      '100 AI generations / month',
+      'Access to all 8+ tools',
       'Basic templates',
       'Email support',
     ],
@@ -19,7 +19,7 @@ const plans = [
     period: '/month',
     description: 'For freelancers and solopreneurs who need more power.',
     features: [
-      '1,000 AI generations / month',
+      ',2000 AI generations / month',
       'Priority response speed',
       'Custom tone & style presets',
       'Export to PDF & DOCX',

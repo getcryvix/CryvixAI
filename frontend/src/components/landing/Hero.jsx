@@ -21,7 +21,7 @@ export default function Hero() {
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-white/60 sm:text-xl">
             Generate emails, proposals, invoices, WhatsApp replies, and social posts
-            in seconds. One platform, six powerful AI assistants built for your business.
+            in seconds. One platform with powerful AI tools for chat, writing, images, invoices, proposals, YouTube content and much more.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -35,7 +35,7 @@ export default function Hero() {
 
           <div className="mt-16 grid grid-cols-3 gap-4 sm:gap-8">
             {[
-              { value: '6', label: 'AI Tools' },
+              { value: '8+', label: 'AI Tools' },
               { value: '10k+', label: 'Generations' },
               { value: '99%', label: 'Uptime' },
             ].map((stat) => (
