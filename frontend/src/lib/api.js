@@ -1,6 +1,9 @@
 import { supabase } from "./supabase";
 
-const API_URL = "http://localhost:3001";
+const API_URL = (
+  import.meta.env.VITE_API_URL ||
+  "https://cryvixai.onrender.com"
+).replace(/\/+$/, "");
 
 async function request(endpoint, body) {
   const {

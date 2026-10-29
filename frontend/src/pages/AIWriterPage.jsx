@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { jsPDF } from "jspdf";
 import Sidebar from "../components/Sidebar";
-
+import { chatWithAI } from "../lib/api";
 export default function AIWriterPage() {
   const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState("");
@@ -15,13 +15,7 @@ export default function AIWriterPage() {
     setResult("");
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: `You are CryvixAI Professional Writer.
+      const message = `You are CryvixAI Professional Writer.
 
 Create a high-quality ${type} based on the user's request.
 
@@ -40,43 +34,25 @@ If the selected type is "Instagram Caption":
 
 If the selected type is "Product Description":
 - Write ONLY a professional product description.
-- Clearly explain the product, its main features and benefits.
-- Focus on why the customer should buy or use the product.
-- Use persuasive but natural language.
-- Do NOT write an email.
-- Do NOT write a blog article.
-- Do NOT invent specifications, prices or claims that the user did not provide.
-- Include a short call-to-action at the end when appropriate.
-- Make the final description ready to copy and use on an online store or website.
+- Clearly explain features and benefits.
+- Do not invent specifications, prices or claims.
+- End with a call-to-action when appropriate.
 
 If the selected type is "Resume":
-- Create professional resume content.
-- Use clear sections such as Professional Summary, Skills, Work Experience and Education.
-- Use bullet points where appropriate.
-- Make the resume ATS-friendly and easy to read.
-- Do NOT invent qualifications, companies, job titles or experience that the user did not provide.
-- If important information is missing, use neutral wording rather than making up facts.
-- Do NOT write an email, blog article or social-media post.
-- Make the result ready to copy into a professional resume.
+- Create professional, ATS-friendly resume content.
+- Include Summary, Skills, Work Experience and Education where appropriate.
+- Do NOT invent qualifications or experience.
 
 If the selected type is "Proposal":
-- Write ONLY a professional business proposal.
-- Start with a clear proposal title.
-- Include an introduction and understanding of the client's requirement.
-- Explain the proposed solution or services.
-- Include scope of work and key deliverables when relevant.
-- Explain benefits and expected outcomes.
-- Include timeline or pricing only when the user provides enough information.
-- Do NOT invent prices, guarantees or business facts.
-- End with a professional conclusion and call-to-action.
-- Do NOT write an email, resume, blog article or social-media post.
-- Make the proposal ready to present to a client.
+- Write a professional business proposal.
+- Include introduction, proposed solution, scope, deliverables, benefits and conclusion.
+- Do NOT invent prices or guarantees.
 
 If the selected type is "Blog Article":
-- Write a complete article with title, introduction, headings, useful content and conclusion.
+- Write a complete article with title, introduction, headings and conclusion.
 
 If the selected type is "YouTube Script":
-- Write a proper script with hook, introduction, main content and ending/CTA.
+- Include a hook, introduction, main content and ending/CTA.
 
 For all other types:
 - Follow the selected content type exactly.
@@ -84,42 +60,35 @@ For all other types:
 - Do not change the requested content type.
 
 User Request:
-${prompt}`,
-          messages: [],
-        }),
-      });
+${prompt}`;
 
-      const data = await res.json();
+      const data = await chatWithAI(message, []);
 
-      if (data.reply) {
-  setResult(data.reply);
-
-  const oldHistory =
-    JSON.parse(localStorage.getItem("cryvixHistory")) || [];
-
-  const newHistory = {
-    type: type,
-    prompt: prompt,
-    result: data.reply,
-    date: new Date().toLocaleString(),
-  };
-
-  localStorage.setItem(
-    "cryvixHistory",
-    JSON.stringify([
-      newHistory,
-      ...oldHistory,
-    ].slice(0, 50))
-  );
-
-} else {
-        setResult("Something went wrong.");
+      if (!data.reply) {
+        throw new Error(data.message || "Content generation failed.");
       }
-    } catch (err) {
-      setResult("Server Error");
-    }
 
-    setLoading(false);
+      setResult(data.reply);
+
+      const oldHistory =
+        JSON.parse(localStorage.getItem("cryvixHistory") || "[]");
+
+      const newHistory = {
+        type,
+        prompt,
+        result: data.reply,
+        date: new Date().toLocaleString(),
+      };
+
+      localStorage.setItem(
+        "cryvixHistory",
+        JSON.stringify([newHistory, ...oldHistory].slice(0, 50))
+      );
+    } catch (err) {
+      setResult(err.message || "Server Error");
+    } finally {
+      setLoading(false);
+    }
   };
   const clearAll = () => {
   setPrompt("");
