@@ -21,6 +21,7 @@ export async function requireAiAccess(req, res, next) {
       await supabaseAdmin.auth.getUser(token);
 
     if (authError || !authData?.user) {
+      console.error("SUPABASE TOKEN VERIFY ERROR:", authError?.message);
       return res.status(401).json({
         success: false,
         code: "AUTH_REQUIRED",
