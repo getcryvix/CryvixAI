@@ -503,6 +503,19 @@ app.get("/api/ai-usage", async (req, res) => {
 // =====================================================
 // AI CHAT
 // =====================================================
+app.use("/api/chat", (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  console.log("CHAT AUTH DEBUG:", {
+    hasAuthorization: Boolean(authHeader),
+    bearerFormat: authHeader?.startsWith("Bearer "),
+    tokenLength: authHeader?.startsWith("Bearer ")
+      ? authHeader.slice(7).length
+      : 0,
+  });
+
+  next();
+});
 
 app.post("/api/chat", requireAiAccess, async (req, res) => {
   try {
