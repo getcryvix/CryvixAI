@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
+import { chatWithAI } from "../lib/api";
 
 export default function WhatsAppPage() {
   const [message, setMessage] = useState("");
@@ -11,26 +12,20 @@ export default function WhatsAppPage() {
     if (!message.trim()) return;
 
     setLoading(true);
+    setReply("");
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: `Write a ${tone} WhatsApp reply for this message:\n\n${message}`,
-          messages: [],
-        }),
-      });
+      const data = await chatWithAI(
+        `Write a ${tone} WhatsApp reply for this message:\n\n${message}`,
+        []
+      );
 
-      const data = await res.json();
       setReply(data.reply || "No reply generated.");
-    } catch {
-      setReply("Server Error");
+    } catch (error) {
+      setReply(error.message || "Server Error");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -63,6 +58,7 @@ export default function WhatsAppPage() {
         <div className="flex gap-3 mt-4">
           <button
             onClick={generateReply}
+            disabled={loading}
             className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-xl"
           >
             {loading ? "Generating..." : "Generate Reply"}
@@ -73,7 +69,7 @@ export default function WhatsAppPage() {
               setMessage("");
               setReply("");
             }}
-            className="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-xl"
+            className="bg-gray-600 hover:bg-gray-700 px-4 py-3 rounded-xl"
           >
             Clear
           </button>
