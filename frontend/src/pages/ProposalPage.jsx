@@ -1,6 +1,7 @@
 import { useState } from "react";
 import jsPDF from "jspdf";
 import Sidebar from "../components/Sidebar";
+import { generateProposal as generateProposalAI } from "../lib/api";
 
 export default function ProposalPage() {
   const [client, setClient] = useState("");
@@ -65,20 +66,9 @@ Generate a proposal with:
 Use professional English.
 `;
 
-      const res = await fetch("http://localhost:3001/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: prompt,
-          messages: [],
-        }),
-      });
+      const data = await generateProposalAI(prompt);
 
-      const data = await res.json();
-
-      setProposal(data.reply || "No proposal generated.");
+setProposal(data.reply || "No proposal generated.");
     } catch (err) {
       setProposal("Server Error");
     }
