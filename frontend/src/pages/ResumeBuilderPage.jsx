@@ -15,6 +15,7 @@ export default function ResumeBuilderPage() {
 
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // =====================================================
   // GENERATE RESUME
@@ -103,6 +104,32 @@ EDUCATION
       .replace(/^[-•*]\s*/, "")
       .trim();
   };
+
+
+  // =====================================================
+// COPY RESUME
+// =====================================================
+
+const copyResume = async () => {
+  const resumeText = `
+${name}
+${jobRole}
+${[email, phone, linkedin].filter(Boolean).join(" | ")}
+
+${result}
+  `.trim();
+
+  try {
+    await navigator.clipboard.writeText(resumeText);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  } catch (error) {
+    alert("Unable to copy resume. Please try again.");
+  }
+};
 
   // =====================================================
   // PDF DOWNLOAD
@@ -291,23 +318,41 @@ EDUCATION
 
           <div className="flex gap-3 pt-3">
 
-            <button
-              onClick={handleGenerate}
-              disabled={loading}
-              className="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? "Generating..." : "Generate Resume"}
-            </button>
+           <button
+  onClick={handleGenerate}
+  disabled={loading}
+  className="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+>
+  {loading ? "Generating..." : "Generate Resume"}
+</button>
 
-            {result && (
-              <button
-                onClick={downloadPDF}
-                className="bg-green-600 px-6 py-3 rounded-lg hover:bg-green-700"
-              >
-                Download PDF
-              </button>
-            )}
+{result && (
+  <>
+    <button
+      onClick={downloadPDF}
+      className="bg-green-600 px-6 py-3 rounded-lg hover:bg-green-700"
+    >
+      Download PDF
+    </button>
 
+    <button
+      onClick={() => {
+        const resumeText = `${name}
+${jobRole}
+${[email, phone, linkedin].filter(Boolean).join(" | ")}
+
+${result}`;
+
+        navigator.clipboard.writeText(resumeText)
+          .then(() => alert("Resume copied successfully!"))
+          .catch(() => alert("Copy failed. Please try again."));
+      }}
+      className="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700"
+    >
+      Copy Resume
+    </button>
+  </>
+)}
           </div>
 
           {/* =====================================================
