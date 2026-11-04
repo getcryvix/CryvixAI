@@ -1,9 +1,9 @@
 import express from "express";
 import { askGroq } from "../services/groq.js";
-
+import { requireAiAccess } from "../middleware/requireAiAccess.js";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", requireAiAccess, async (req, res) => {
   try {
     const {
       text,

@@ -152,3 +152,10 @@ export function generatePrompt(requestText) {
     request: requestText,
   });
 }
+
+export function rewriteGrammar(text, mode) {
+  return request("/api/grammar-rewriter", {
+    text,
+    mode,
+  });
+}
