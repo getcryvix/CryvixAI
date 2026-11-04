@@ -147,3 +147,8 @@ export async function chatWithPDF(formData) {
 
   return data;
 }
+export function generatePrompt(requestText) {
+  return request("/api/prompt-generator", {
+    request: requestText,
+  });
+}
